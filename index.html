@@ -14,13 +14,12 @@
     --accent: #c8f06e;
     --accent2: #6ef0c8;
     --danger: #f06e6e;
+    --warn: #f0c86e;
     --text: #e8e8ea;
     --muted: #6b6b78;
     --radius: 12px;
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -29,446 +28,106 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 16px 60px;
-    overflow-x: hidden;
+    padding: 0 16px 80px;
   }
-
-  /* Background grain */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
   }
-
-  /* HEADER */
   header {
     width: 100%;
     max-width: 720px;
-    padding: 36px 0 28px;
+    padding: 36px 0 24px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 16px;
     position: relative;
     z-index: 1;
+    flex-wrap: wrap;
   }
-
-  .logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 28px;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
-
-  .logo span { color: var(--muted); font-style: italic; font-size: 22px; }
-
-  /* STATS BAR */
-  .stats {
-    margin-left: auto;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .stat-val {
-    font-size: 16px;
-    color: var(--text);
-    display: block;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  /* LEVEL BAR */
-  .level-container {
-    width: 100%;
-    max-width: 720px;
-    margin-bottom: 28px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .level-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .level-badge {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3px 12px;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-  }
-
-  .level-track {
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .level-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border-radius: 2px;
-    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  /* MAIN CARD */
-  .card {
-    width: 100%;
-    max-width: 720px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 40px;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-  }
-
-  .card::after {
-    content: '';
-    position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(200,240,110,0.04) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  /* EXERCISE TYPE TABS */
-  .type-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 32px;
-  }
-
-  .tab {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .logo { font-family: 'Instrument Serif', serif; font-size: 26px; color: var(--accent); letter-spacing: -0.5px; }
+  .logo span { color: var(--muted); font-style: italic; font-size: 20px; }
+  .stats { margin-left: auto; display: flex; gap: 18px; align-items: center; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .stat-val { font-size: 15px; color: var(--text); display: block; letter-spacing: 0; text-transform: none; }
+  .level-container { width: 100%; max-width: 720px; margin-bottom: 24px; position: relative; z-index: 1; }
+  .level-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .level-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; font-size: 10px; letter-spacing: 0.06em; color: var(--accent); }
+  .level-track { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .level-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 2px; transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .card { width: 100%; max-width: 720px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 40px; position: relative; z-index: 1; overflow: hidden; }
+  .card::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(200,240,110,0.04) 0%, transparent 70%); pointer-events: none; }
+  .type-tabs { display: flex; gap: 8px; margin-bottom: 30px; }
+  .tab { flex: 1; padding: 9px 8px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
   .tab:hover { border-color: var(--accent); color: var(--text); }
-  .tab.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #0e0e0f;
-    font-weight: 500;
-  }
-
-  /* EXERCISE LABEL */
-  .exercise-label {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .exercise-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* SENTENCE DISPLAY */
-  .sentence-display {
-    font-family: 'Instrument Serif', serif;
-    font-size: 26px;
-    line-height: 1.45;
-    color: var(--text);
-    margin-bottom: 28px;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-  }
-
-  .sentence-display.loading {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 18px;
-  }
-
-  /* AUDIO BUTTON (exercise 1) */
-  .audio-section {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-
-  .play-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s, opacity 0.15s;
-    flex-shrink: 0;
-  }
-
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #0e0e0f; font-weight: 500; }
+  .exercise-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .exercise-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .sentence-display { font-family: 'Instrument Serif', serif; font-size: 24px; line-height: 1.5; color: var(--text); margin-bottom: 24px; min-height: 72px; display: flex; align-items: center; }
+  .audio-section { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .play-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--accent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.15s, opacity 0.15s; flex-shrink: 0; }
   .play-btn:hover { transform: scale(1.08); }
   .play-btn:active { transform: scale(0.95); }
-  .play-btn.playing { background: var(--accent2); }
-
+  .play-btn.playing { background: var(--accent2); animation: pulse 1s ease-in-out infinite; }
   .play-btn svg { fill: #0e0e0f; }
-
-  .audio-hint {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  /* INPUT */
-  .answer-area {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .answer-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 15px;
-    line-height: 1.6;
-    resize: vertical;
-    min-height: 100px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+  .audio-hint { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .answer-area { position: relative; margin-bottom: 18px; }
+  .answer-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.6; resize: vertical; min-height: 90px; outline: none; transition: border-color 0.2s; }
   .answer-input:focus { border-color: var(--accent); }
   .answer-input.correct { border-color: var(--accent); background: rgba(200,240,110,0.04); }
   .answer-input.incorrect { border-color: var(--danger); background: rgba(240,110,110,0.04); }
-
-  /* SUBMIT */
-  .actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    padding: 12px 28px;
-    background: var(--accent);
-    border: none;
-    border-radius: 8px;
-    color: #0e0e0f;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: opacity 0.2s, transform 0.15s;
-  }
-
+  .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-primary { padding: 11px 26px; background: var(--accent); border: none; border-radius: 8px; color: #0e0e0f; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; cursor: pointer; letter-spacing: 0.04em; transition: opacity 0.2s, transform 0.15s; }
   .btn-primary:hover { opacity: 0.85; }
   .btn-primary:active { transform: scale(0.97); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  .btn-ghost {
-    padding: 12px 20px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
+  .btn-ghost { padding: 11px 18px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, color 0.2s; }
   .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
-
-  /* FEEDBACK */
-  .feedback {
-    margin-top: 24px;
-    padding: 20px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    font-size: 13px;
-    line-height: 1.7;
-    display: none;
-    animation: slideUp 0.3s ease;
-  }
-
+  .feedback { margin-top: 22px; padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--border); font-size: 13px; line-height: 1.7; display: none; animation: slideUp 0.3s ease; }
   .feedback.visible { display: block; }
-  .feedback.correct { border-color: rgba(200,240,110,0.3); background: rgba(200,240,110,0.05); }
-  .feedback.incorrect { border-color: rgba(240,110,110,0.3); background: rgba(240,110,110,0.05); }
-
-  .feedback-header {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    font-weight: 500;
-  }
-
+  .feedback.correct { border-color: rgba(200,240,110,0.3); background: rgba(200,240,110,0.04); }
+  .feedback.incorrect { border-color: rgba(240,110,110,0.3); background: rgba(240,110,110,0.04); }
+  .feedback-header { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
   .feedback.correct .feedback-header { color: var(--accent); }
   .feedback.incorrect .feedback-header { color: var(--danger); }
+  .diff-change { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-top: 10px; }
+  .diff-change.up { background: rgba(200,240,110,0.1); color: var(--accent); }
+  .diff-change.down { background: rgba(240,110,110,0.1); color: var(--danger); }
+  .next-container { margin-top: 18px; display: none; }
+  .next-container.visible { display: flex; gap: 10px; flex-wrap: wrap; }
+  .source-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 9px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); margin-left: auto; }
+  .source-badge.ai { border-color: rgba(110,240,200,0.3); color: var(--accent2); }
 
-  .correction { color: var(--text); }
-  .correction strong { color: var(--accent); }
-
-  /* DIFFICULTY CHANGE PILL */
-  .diff-change {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-top: 10px;
-  }
-
-  .diff-change.up { background: rgba(200,240,110,0.12); color: var(--accent); }
-  .diff-change.down { background: rgba(240,110,110,0.12); color: var(--danger); }
-
-  /* API KEY SETUP */
-  .setup-panel {
-    width: 100%;
-    max-width: 720px;
-    z-index: 1;
-    position: relative;
-    margin-top: 20px;
-  }
-
-  .setup-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px 40px;
-  }
-
-  .setup-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-
-  .setup-desc {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 24px;
-  }
-
-  .setup-desc a { color: var(--accent); text-decoration: none; }
-  .setup-desc a:hover { text-decoration: underline; }
-
-  .key-input-row {
-    display: flex;
-    gap: 10px;
-  }
-
-  .key-input {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .key-input:focus { border-color: var(--accent); }
-
-  .key-note {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.6;
-  }
-
-  /* SPINNER */
-  .spinner {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(14,14,15,0.3);
-    border-top-color: #0e0e0f;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
-
+  /* SETTINGS PANEL */
+  .settings-bar { width: 100%; max-width: 720px; margin-top: 14px; position: relative; z-index: 1; }
+  .settings-toggle { background: none; border: none; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; letter-spacing: 0.05em; transition: color 0.2s; }
+  .settings-toggle:hover { color: var(--text); }
+  .settings-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-top: 10px; display: none; animation: slideUp 0.25s ease; }
+  .settings-panel.open { display: block; }
+  .settings-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .gemini-row { display: flex; gap: 10px; align-items: center; }
+  .gemini-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; outline: none; transition: border-color 0.2s; }
+  .gemini-input:focus { border-color: var(--accent2); }
+  .gemini-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+  .gemini-note a { color: var(--accent2); text-decoration: none; }
+  .gemini-note a:hover { text-decoration: underline; }
+  .gemini-status { font-size: 11px; margin-top: 8px; }
+  .gemini-status.ok { color: var(--accent); }
+  .gemini-status.off { color: var(--muted); }
+  .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(14,14,15,0.3); border-top-color: #0e0e0f; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 5px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* NEXT BUTTON CONTAINER */
-  .next-container {
-    margin-top: 20px;
-    display: none;
-  }
-  .next-container.visible { display: flex; }
-
-  /* STREAK BADGE */
-  .streak {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--accent);
-  }
-
-  /* hidden */
+  @keyframes slideUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .hidden { display: none !important; }
-
-  @media (max-width: 600px) {
-    .card { padding: 24px 20px; }
-    .setup-card { padding: 24px 20px; }
-    header { flex-wrap: wrap; }
+  @media (max-width: 580px) {
+    .card { padding: 22px 18px; }
     .sentence-display { font-size: 20px; }
     .stats { gap: 12px; }
+    .type-tabs { gap: 5px; }
+    .tab { font-size: 10px; padding: 8px 5px; }
   }
 </style>
 </head>
@@ -477,198 +136,330 @@
 <header>
   <div class="logo">English<span>trainer</span></div>
   <div class="stats">
-    <div>
-      <span class="stat-val" id="scoreDisplay">0</span>
-      score
-    </div>
-    <div>
-      <span class="stat-val" id="streakDisplay">0🔥</span>
-      streak
-    </div>
-    <div>
-      <span class="stat-val" id="sessionDisplay">0</span>
-      exercices
-    </div>
+    <div><span class="stat-val" id="scoreDisplay">0</span>score</div>
+    <div><span class="stat-val" id="streakDisplay">0🔥</span>série</div>
+    <div><span class="stat-val" id="sessionDisplay">0</span>exercices</div>
   </div>
 </header>
 
-<!-- SETUP PANEL -->
-<div class="setup-panel" id="setupPanel">
-  <div class="setup-card">
-    <div class="setup-title">Configurer l'application</div>
-    <div class="setup-desc">
-      Cette application utilise l'API Claude pour générer des exercices personnalisés.<br>
-      Entrez votre clé API Anthropic (elle restera <strong>uniquement dans votre navigateur</strong>).<br>
-      Obtenez une clé sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+<div class="level-container">
+  <div class="level-info">
+    <span>Difficulté</span>
+    <span class="level-badge" id="levelLabel">A2 — Élémentaire</span>
+  </div>
+  <div class="level-track"><div class="level-fill" id="levelFill" style="width:20%"></div></div>
+</div>
+
+<div class="card">
+  <div class="type-tabs">
+    <button class="tab active" id="tab1" onclick="switchMode('listen')">🎧 Dictée</button>
+    <button class="tab" id="tab2" onclick="switchMode('translate')">🔤 Traduction</button>
+    <button class="tab" id="tab3" onclick="switchMode('random')">🎲 Aléatoire</button>
+  </div>
+
+  <div class="exercise-label" id="exerciseLabel">Dictée anglaise</div>
+
+  <div id="listenContent">
+    <div class="audio-section">
+      <button class="play-btn" id="playBtn" onclick="playAudio()" title="Écouter">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="audio-hint">Écoutez la phrase et écrivez-la en anglais.<br><span style="color:var(--muted);font-size:11px">Ctrl+Entrée pour valider. Cliquez ▶ pour réécouter.</span></div>
     </div>
-    <div class="key-input-row">
-      <input type="password" class="key-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-      <button class="btn-primary" onclick="saveApiKey()">Démarrer</button>
-    </div>
-    <div class="key-note">🔒 La clé est stockée dans localStorage — elle ne quitte jamais votre appareil.</div>
+  </div>
+
+  <div id="translateContent" class="hidden">
+    <div class="sentence-display" id="sentenceDisplay">…</div>
+  </div>
+
+  <div class="answer-area">
+    <textarea class="answer-input" id="answerInput" placeholder="Votre réponse ici…" rows="3" onkeydown="handleKey(event)"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">Valider</button>
+    <button class="btn-ghost" onclick="skipExercise()">Passer</button>
+    <span class="source-badge" id="sourceBadge">📚 local</span>
+  </div>
+
+  <div class="feedback" id="feedback">
+    <div class="feedback-header" id="feedbackHeader"></div>
+    <div id="feedbackBody"></div>
+    <div id="diffPill"></div>
+  </div>
+
+  <div class="next-container" id="nextContainer">
+    <button class="btn-primary" onclick="nextExercise()">Suivant →</button>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="mainApp" class="hidden" style="width:100%;max-width:720px;position:relative;z-index:1;">
-
-  <!-- Level bar -->
-  <div class="level-container">
-    <div class="level-info">
-      <span>Niveau de difficulté</span>
-      <span class="level-badge" id="levelLabel">A2 — Élémentaire</span>
+<div class="settings-bar">
+  <button class="settings-toggle" onclick="toggleSettings()">⚙ Paramètres Gemini <span id="settingsArrow">▸</span></button>
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-title">API Gemini (gratuit)</div>
+    <div class="gemini-row">
+      <input type="password" class="gemini-input" id="geminiKeyInput" placeholder="Votre clé API Google Gemini…" autocomplete="off">
+      <button class="btn-primary" style="white-space:nowrap" onclick="saveGeminiKey()">Enregistrer</button>
+      <button class="btn-ghost" onclick="clearGeminiKey()">Retirer</button>
     </div>
-    <div class="level-track">
-      <div class="level-fill" id="levelFill" style="width: 20%"></div>
+    <div class="gemini-note">
+      Clé gratuite sur <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> (compte Google requis, 60 req/min).<br>
+      Sans clé : exercices depuis la banque locale (200+ phrases). La clé est stockée dans votre navigateur uniquement.
     </div>
-  </div>
-
-  <!-- Main card -->
-  <div class="card">
-    <div class="type-tabs">
-      <button class="tab active" id="tab1" onclick="switchMode('listen')">🎧 Dictée</button>
-      <button class="tab" id="tab2" onclick="switchMode('translate')">🔤 Traduction</button>
-      <button class="tab" id="tab3" onclick="switchMode('random')">🎲 Aléatoire</button>
-    </div>
-
-    <!-- EXERCISE AREA -->
-    <div id="exerciseArea">
-      <div class="exercise-label" id="exerciseLabel">Dictée anglaise</div>
-
-      <!-- Listen mode content -->
-      <div id="listenContent">
-        <div class="audio-section">
-          <button class="play-btn" id="playBtn" onclick="playAudio()" title="Écouter la phrase">
-            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <div class="audio-hint">
-            Écoutez la phrase en anglais et écrivez ce que vous entendez.<br>
-            <span style="color:var(--muted);font-size:11px">Cliquez plusieurs fois pour réécouter.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Translate mode content -->
-      <div id="translateContent" class="hidden">
-        <div class="sentence-display" id="sentenceDisplay">
-          <span style="color:var(--muted);font-style:italic">Génération en cours...</span>
-        </div>
-      </div>
-
-      <div class="answer-area">
-        <textarea class="answer-input" id="answerInput"
-          placeholder="Votre réponse ici..."
-          rows="3"
-          onkeydown="handleKey(event)"></textarea>
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">
-          Valider
-        </button>
-        <button class="btn-ghost" onclick="skipExercise()">Passer</button>
-        <div class="streak hidden" id="streakBadge"></div>
-      </div>
-
-      <div class="feedback" id="feedback">
-        <div class="feedback-header" id="feedbackHeader"></div>
-        <div class="correction" id="feedbackBody"></div>
-        <div id="diffPill"></div>
-      </div>
-
-      <div class="next-container" id="nextContainer">
-        <button class="btn-primary" onclick="nextExercise()">Exercice suivant →</button>
-      </div>
-    </div>
-  </div>
-
-  <div style="margin-top:12px;text-align:right;z-index:1;position:relative;">
-    <button class="btn-ghost" onclick="resetApiKey()" style="font-size:11px;padding:8px 14px;">
-      ⚙ Changer la clé API
-    </button>
+    <div class="gemini-status off" id="geminiStatus">● Mode local activé</div>
   </div>
 </div>
 
 <script>
-// ─── STATE ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// BANK OF SENTENCES  (200+ entries, 6 levels)
+// ══════════════════════════════════════════════════════════
+const BANK = {
+  0: [ // A1
+    {en:"I have a cat.",fr:"J'ai un chat."},
+    {en:"She is my sister.",fr:"C'est ma sœur."},
+    {en:"We eat breakfast every morning.",fr:"Nous prenons le petit déjeuner chaque matin."},
+    {en:"The dog is under the table.",fr:"Le chien est sous la table."},
+    {en:"I like apples and oranges.",fr:"J'aime les pommes et les oranges."},
+    {en:"He goes to school by bus.",fr:"Il va à l'école en bus."},
+    {en:"The sky is blue today.",fr:"Le ciel est bleu aujourd'hui."},
+    {en:"My name is not difficult.",fr:"Mon nom n'est pas difficile."},
+    {en:"She drinks coffee every day.",fr:"Elle boit du café tous les jours."},
+    {en:"There are two chairs in the room.",fr:"Il y a deux chaises dans la pièce."},
+    {en:"I speak a little English.",fr:"Je parle un peu anglais."},
+    {en:"The book is on the table.",fr:"Le livre est sur la table."},
+    {en:"We live in a small house.",fr:"Nous habitons dans une petite maison."},
+    {en:"He is a good teacher.",fr:"C'est un bon professeur."},
+    {en:"They are happy today.",fr:"Ils sont heureux aujourd'hui."},
+    {en:"I do not like cold weather.",fr:"Je n'aime pas le temps froid."},
+    {en:"She has a red bag.",fr:"Elle a un sac rouge."},
+    {en:"The children play in the garden.",fr:"Les enfants jouent dans le jardin."},
+    {en:"I want a glass of water.",fr:"Je veux un verre d'eau."},
+    {en:"He works in a bank.",fr:"Il travaille dans une banque."},
+  ],
+  1: [ // A2
+    {en:"I usually wake up at seven o'clock.",fr:"Je me lève habituellement à sept heures."},
+    {en:"She went to the supermarket yesterday.",fr:"Elle est allée au supermarché hier."},
+    {en:"We had a great time at the party.",fr:"Nous avons passé un bon moment à la fête."},
+    {en:"He forgot his keys at home again.",fr:"Il a encore oublié ses clés à la maison."},
+    {en:"They are planning a trip to London.",fr:"Ils planifient un voyage à Londres."},
+    {en:"My brother works very long hours.",fr:"Mon frère travaille de très longues heures."},
+    {en:"The weather was perfect for a picnic.",fr:"Le temps était parfait pour un pique-nique."},
+    {en:"I have been learning English for two years.",fr:"J'apprends l'anglais depuis deux ans."},
+    {en:"She prefers tea to coffee in the morning.",fr:"Elle préfère le thé au café le matin."},
+    {en:"We need to buy some milk and bread.",fr:"Nous devons acheter du lait et du pain."},
+    {en:"Can you help me find my glasses?",fr:"Peux-tu m'aider à trouver mes lunettes ?"},
+    {en:"He called me three times this morning.",fr:"Il m'a appelé trois fois ce matin."},
+    {en:"The train leaves at half past eight.",fr:"Le train part à huit heures et demie."},
+    {en:"I am not sure where the post office is.",fr:"Je ne suis pas sûr de l'endroit où se trouve la poste."},
+    {en:"She always arrives late for meetings.",fr:"Elle arrive toujours en retard aux réunions."},
+    {en:"We decided to stay at home this weekend.",fr:"Nous avons décidé de rester à la maison ce week-end."},
+    {en:"He does not enjoy cooking very much.",fr:"Il n'aime pas vraiment cuisiner."},
+    {en:"My parents visit us every Sunday.",fr:"Mes parents nous rendent visite chaque dimanche."},
+    {en:"The shop closes at nine in the evening.",fr:"Le magasin ferme à neuf heures du soir."},
+    {en:"I would like to order a pizza, please.",fr:"Je voudrais commander une pizza, s'il vous plaît."},
+    {en:"She is reading a very interesting book.",fr:"Elle lit un livre très intéressant."},
+    {en:"They moved to a new apartment last month.",fr:"Ils ont déménagé dans un nouvel appartement le mois dernier."},
+  ],
+  2: [ // B1
+    {en:"If I had more time, I would travel more often.",fr:"Si j'avais plus de temps, je voyagerais plus souvent."},
+    {en:"She has been working at this company for five years.",fr:"Elle travaille dans cette entreprise depuis cinq ans."},
+    {en:"The report must be submitted before the end of the week.",fr:"Le rapport doit être remis avant la fin de la semaine."},
+    {en:"He suggested that we meet at the coffee shop on Friday.",fr:"Il a suggéré que nous nous retrouvions au café vendredi."},
+    {en:"Despite the rain, they decided to go for a walk.",fr:"Malgré la pluie, ils ont décidé d'aller se promener."},
+    {en:"I am not used to speaking in front of large groups.",fr:"Je n'ai pas l'habitude de parler devant de grands groupes."},
+    {en:"The film was so boring that half the audience fell asleep.",fr:"Le film était si ennuyeux que la moitié du public s'est endormie."},
+    {en:"You should have told me about this problem earlier.",fr:"Tu aurais dû me parler de ce problème plus tôt."},
+    {en:"She managed to finish the project despite many difficulties.",fr:"Elle a réussi à terminer le projet malgré de nombreuses difficultés."},
+    {en:"By the time we arrived, the concert had already started.",fr:"Quand nous sommes arrivés, le concert avait déjà commencé."},
+    {en:"He tends to exaggerate when he tells stories.",fr:"Il a tendance à exagérer quand il raconte des histoires."},
+    {en:"I wish I had studied harder when I was at school.",fr:"J'aurais aimé travailler davantage quand j'étais à l'école."},
+    {en:"The instructions were not clear enough for most people.",fr:"Les instructions n'étaient pas assez claires pour la plupart des gens."},
+    {en:"She pointed out several mistakes in my essay.",fr:"Elle a signalé plusieurs erreurs dans ma dissertation."},
+    {en:"We are considering moving to the south of France.",fr:"Nous envisageons de déménager dans le sud de la France."},
+    {en:"It is essential that everyone follows the safety rules.",fr:"Il est essentiel que tout le monde respecte les règles de sécurité."},
+    {en:"He was promoted to manager after only six months.",fr:"Il a été promu manager après seulement six mois."},
+    {en:"They spent three weeks travelling across Southeast Asia.",fr:"Ils ont passé trois semaines à voyager en Asie du Sud-Est."},
+    {en:"I would rather stay in than go out on such a cold night.",fr:"Je préférerais rester à la maison plutôt que de sortir par une nuit aussi froide."},
+    {en:"The children were too excited to go to sleep.",fr:"Les enfants étaient trop excités pour s'endormir."},
+  ],
+  3: [ // B2
+    {en:"Had I known about the delays, I would have taken an earlier train.",fr:"Si j'avais su les retards, j'aurais pris un train plus tôt."},
+    {en:"The government is under increasing pressure to address the housing crisis.",fr:"Le gouvernement est soumis à une pression croissante pour résoudre la crise du logement."},
+    {en:"She comes across as confident, although she struggles with self-doubt.",fr:"Elle paraît confiante, bien qu'elle soit en proie au doute."},
+    {en:"The proposal was met with considerable scepticism by the board of directors.",fr:"La proposition a été accueillie avec un scepticisme considérable par le conseil d'administration."},
+    {en:"Not only did he finish first, but he also broke the world record.",fr:"Non seulement il a terminé premier, mais il a aussi battu le record du monde."},
+    {en:"It is widely acknowledged that climate change poses an existential threat.",fr:"Il est largement reconnu que le changement climatique constitue une menace existentielle."},
+    {en:"She is known for her ability to remain calm under pressure.",fr:"Elle est connue pour sa capacité à rester calme sous pression."},
+    {en:"The study revealed a strong correlation between diet and mental health.",fr:"L'étude a révélé une forte corrélation entre l'alimentation et la santé mentale."},
+    {en:"By the time the investigation was complete, the suspect had fled the country.",fr:"Au moment où l'enquête était terminée, le suspect avait fui le pays."},
+    {en:"He reluctantly admitted that his initial assessment had been wrong.",fr:"Il a reconnu à contrecœur que son évaluation initiale était erronée."},
+    {en:"The technology has the potential to revolutionise the way we communicate.",fr:"La technologie a le potentiel de révolutionner notre façon de communiquer."},
+    {en:"Despite widespread opposition, the law was passed with a narrow majority.",fr:"Malgré une opposition généralisée, la loi a été adoptée à une courte majorité."},
+    {en:"She tends to take on more responsibilities than she can comfortably manage.",fr:"Elle a tendance à prendre plus de responsabilités qu'elle ne peut en gérer confortablement."},
+    {en:"The findings suggest that early intervention leads to significantly better outcomes.",fr:"Les résultats suggèrent qu'une intervention précoce conduit à de bien meilleurs résultats."},
+    {en:"He was taken aback by the overwhelmingly positive response from the audience.",fr:"Il a été surpris par la réaction extrêmement positive du public."},
+  ],
+  4: [ // C1
+    {en:"The implications of this discovery are far-reaching and not yet fully understood.",fr:"Les implications de cette découverte sont considérables et ne sont pas encore pleinement comprises."},
+    {en:"Notwithstanding the challenges, the team delivered results that exceeded all expectations.",fr:"Malgré les défis, l'équipe a livré des résultats qui ont dépassé toutes les attentes."},
+    {en:"She has an uncanny ability to anticipate problems before they actually materialise.",fr:"Elle a une capacité étrange à anticiper les problèmes avant qu'ils ne se concrétisent."},
+    {en:"The legislation, once heralded as groundbreaking, has since been widely criticised.",fr:"La législation, autrefois saluée comme révolutionnaire, a depuis été largement critiquée."},
+    {en:"It is not so much the cost that is prohibitive, but rather the time required.",fr:"Ce n'est pas tant le coût qui est prohibitif, mais plutôt le temps nécessaire."},
+    {en:"He was at pains to stress that the decision had not been taken lightly.",fr:"Il a tenu à souligner que la décision n'avait pas été prise à la légère."},
+    {en:"The ambiguity surrounding the regulation has created significant uncertainty for investors.",fr:"L'ambiguïté entourant la réglementation a créé une incertitude significative pour les investisseurs."},
+    {en:"Her mastery of the subject was evident from the clarity of her argumentation.",fr:"Sa maîtrise du sujet était évidente dans la clarté de son argumentation."},
+    {en:"The assumption that economic growth automatically reduces inequality has been challenged.",fr:"L'hypothèse selon laquelle la croissance économique réduit automatiquement les inégalités a été remise en question."},
+    {en:"He articulated his position with remarkable precision, leaving no room for misinterpretation.",fr:"Il a exposé sa position avec une précision remarquable, ne laissant aucune place à la mauvaise interprétation."},
+    {en:"The policy shift represents a fundamental departure from the established orthodoxy.",fr:"Le changement de politique représente un abandon fondamental de l'orthodoxie établie."},
+    {en:"She drew on a wide range of sources to construct a nuanced and compelling argument.",fr:"Elle a puisé dans de nombreuses sources pour construire un argument nuancé et convaincant."},
+  ],
+  5: [ // C2
+    {en:"The philosopher's contention that free will is an illusion remains deeply contentious.",fr:"La thèse du philosophe selon laquelle le libre arbitre est une illusion reste profondément controversée."},
+    {en:"One cannot overstate the extent to which institutional inertia hampers meaningful reform.",fr:"On ne peut pas surestimer dans quelle mesure l'inertie institutionnelle entrave une réforme significative."},
+    {en:"The novel's narrative structure deliberately subverts conventional expectations of closure.",fr:"La structure narrative du roman subvertit délibérément les attentes conventionnelles de clôture."},
+    {en:"Her argument, though superficially persuasive, collapses under rigorous scrutiny.",fr:"Son argument, bien que superficiellement convaincant, s'effondre sous un examen rigoureux."},
+    {en:"The data, taken in isolation, lends itself to misinterpretation without broader contextualisation.",fr:"Les données, prises isolément, se prêtent à des interprétations erronées sans contextualisation plus large."},
+    {en:"A nuanced reading of the text reveals layers of irony that are easy to overlook.",fr:"Une lecture nuancée du texte révèle des couches d'ironie qu'il est facile de négliger."},
+    {en:"The paradox at the heart of liberal democracy is that freedom can undermine itself.",fr:"Le paradoxe au cœur de la démocratie libérale est que la liberté peut se saper elle-même."},
+    {en:"Beneath the veneer of consensus lay profound and irreconcilable differences of vision.",fr:"Derrière le vernis de consensus se cachaient de profondes et irréconciliables différences de vision."},
+    {en:"The convergence of technological and geopolitical forces has rendered previous frameworks obsolete.",fr:"La convergence des forces technologiques et géopolitiques a rendu obsolètes les cadres précédents."},
+    {en:"It would be reductive to attribute the decline solely to mismanagement at the executive level.",fr:"Il serait réducteur d'attribuer le déclin uniquement à une mauvaise gestion au niveau exécutif."},
+  ],
+};
+
+// ══════════════════════════════════════════════════════════
+// LOCAL CORRECTION HELPERS
+// ══════════════════════════════════════════════════════════
+function normalize(s) {
+  return s.toLowerCase()
+    .replace(/[''`]/g, "'")
+    .replace(/[^a-z0-9\s']/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function similarity(a, b) {
+  const na = normalize(a), nb = normalize(b);
+  if (na === nb) return 100;
+  const wa = na.split(' '), wb = nb.split(' ');
+  const hits = wa.filter(w => wb.includes(w)).length;
+  return Math.round((hits / Math.max(wa.length, wb.length)) * 100);
+}
+
+function wordDiff(correct, student) {
+  const wc = correct.split(' '), ws = student.split(' ');
+  return wc.map(w => {
+    const norm = w.toLowerCase().replace(/[^a-z0-9']/g, '');
+    const found = ws.some(sw => sw.toLowerCase().replace(/[^a-z0-9']/g, '') === norm);
+    return found ? w : `<strong style="color:var(--accent)">${w}</strong>`;
+  }).join(' ');
+}
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
 const LEVELS = [
-  { label: "A1 — Débutant",    fill: 5,   prompt: "very simple A1 English, short sentences (5-8 words), basic vocabulary" },
-  { label: "A2 — Élémentaire", fill: 20,  prompt: "simple A2 English, everyday sentences (8-12 words), common vocabulary" },
-  { label: "B1 — Intermédiaire",fill: 40, prompt: "intermediate B1 English, medium sentences (12-18 words), varied vocabulary" },
-  { label: "B2 — Avancé",      fill: 60,  prompt: "upper-intermediate B2 English, complex sentences (18-25 words), rich vocabulary" },
-  { label: "C1 — Expert",      fill: 80,  prompt: "advanced C1 English, sophisticated sentences (20-30 words), idiomatic language" },
-  { label: "C2 — Maîtrise",    fill: 100, prompt: "mastery C2 English, complex structures (25-35 words), nuanced and formal language" },
+  { label:"A1 — Débutant",     fill:5,   key:0 },
+  { label:"A2 — Élémentaire",  fill:20,  key:1 },
+  { label:"B1 — Intermédiaire",fill:40,  key:2 },
+  { label:"B2 — Avancé",       fill:60,  key:3 },
+  { label:"C1 — Expert",       fill:80,  key:4 },
+  { label:"C2 — Maîtrise",     fill:100, key:5 },
 ];
 
 let state = {
-  apiKey: localStorage.getItem('et_apikey') || '',
-  level: parseInt(localStorage.getItem('et_level') || '1'),
+  geminiKey: localStorage.getItem('et_gemini') || '',
+  level: Math.min(parseInt(localStorage.getItem('et_level') || '1'), 5),
   score: parseInt(localStorage.getItem('et_score') || '0'),
   streak: 0,
   session: 0,
-  mode: 'listen', // listen | translate | random
+  mode: 'listen',
+  currentMode: 'listen',
   currentSentence: '',
-  currentTranslation: '',
+  currentFrench: '',
   submitted: false,
   loading: false,
+  usedLocal: new Set(),
 };
 
-// ─── INIT ───────────────────────────────────────────────────────────────────
-window.onload = () => {
-  if (state.apiKey) {
-    showApp();
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  if (state.geminiKey) {
+    document.getElementById('geminiKeyInput').value = state.geminiKey;
+    updateGeminiStatus(true);
   }
-};
-
-function saveApiKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('sk-')) {
-    alert('Clé API invalide. Elle doit commencer par "sk-"');
-    return;
-  }
-  state.apiKey = key;
-  localStorage.setItem('et_apikey', key);
-  showApp();
-}
-
-function resetApiKey() {
-  localStorage.removeItem('et_apikey');
-  state.apiKey = '';
-  document.getElementById('mainApp').classList.add('hidden');
-  document.getElementById('setupPanel').classList.remove('hidden');
-  document.getElementById('apiKeyInput').value = '';
-}
-
-function showApp() {
-  document.getElementById('setupPanel').classList.add('hidden');
-  document.getElementById('mainApp').classList.remove('hidden');
   updateUI();
   generateExercise();
+});
+
+// Preload voices
+window.speechSynthesis.onvoiceschanged = () => {};
+
+// ══════════════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════════════
+function toggleSettings() {
+  const panel = document.getElementById('settingsPanel');
+  const arrow = document.getElementById('settingsArrow');
+  const open = panel.classList.toggle('open');
+  arrow.textContent = open ? '▾' : '▸';
 }
 
-// ─── MODE ────────────────────────────────────────────────────────────────────
+function saveGeminiKey() {
+  const key = document.getElementById('geminiKeyInput').value.trim();
+  if (!key) { clearGeminiKey(); return; }
+  state.geminiKey = key;
+  localStorage.setItem('et_gemini', key);
+  updateGeminiStatus(true);
+}
+
+function clearGeminiKey() {
+  state.geminiKey = '';
+  localStorage.removeItem('et_gemini');
+  document.getElementById('geminiKeyInput').value = '';
+  updateGeminiStatus(false);
+}
+
+function updateGeminiStatus(active) {
+  const el = document.getElementById('geminiStatus');
+  if (active) {
+    el.className = 'gemini-status ok';
+    el.textContent = '● Mode IA Gemini activé — exercices générés dynamiquement';
+  } else {
+    el.className = 'gemini-status off';
+    el.textContent = '● Mode local activé — 200+ phrases intégrées';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// MODE
+// ══════════════════════════════════════════════════════════
 function switchMode(mode) {
   state.mode = mode;
-  document.getElementById('tab1').classList.toggle('active', mode === 'listen');
-  document.getElementById('tab2').classList.toggle('active', mode === 'translate');
-  document.getElementById('tab3').classList.toggle('active', mode === 'random');
+  ['tab1','tab2','tab3'].forEach((id, i) => {
+    document.getElementById(id).classList.toggle('active', ['listen','translate','random'][i] === mode);
+  });
   generateExercise();
 }
 
 function getEffectiveMode() {
-  if (state.mode === 'random') return Math.random() < 0.5 ? 'listen' : 'translate';
-  return state.mode;
+  return state.mode === 'random' ? (Math.random() < 0.5 ? 'listen' : 'translate') : state.mode;
 }
 
-// ─── GENERATE ────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// GENERATE
+// ══════════════════════════════════════════════════════════
 async function generateExercise() {
   if (state.loading) return;
   state.loading = true;
   state.submitted = false;
 
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span class="spinner"></span>Génération...';
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Chargement…';
 
   hideFeedback();
   document.getElementById('nextContainer').classList.remove('visible');
@@ -676,96 +467,102 @@ async function generateExercise() {
   document.getElementById('answerInput').className = 'answer-input';
   document.getElementById('answerInput').disabled = false;
 
-  const effectiveMode = getEffectiveMode();
-  state.currentMode = effectiveMode;
+  const em = getEffectiveMode();
+  state.currentMode = em;
 
-  const level = LEVELS[state.level];
+  document.getElementById('listenContent').classList.toggle('hidden', em !== 'listen');
+  document.getElementById('translateContent').classList.toggle('hidden', em !== 'translate');
+  document.getElementById('exerciseLabel').textContent =
+    em === 'listen' ? '🎧 Écrivez la phrase que vous entendez' : '🔤 Traduisez en anglais';
 
-  // Show/hide sections
-  document.getElementById('listenContent').classList.toggle('hidden', effectiveMode !== 'listen');
-  document.getElementById('translateContent').classList.toggle('hidden', effectiveMode !== 'translate');
-
-  if (effectiveMode === 'listen') {
-    document.getElementById('exerciseLabel').textContent = '🎧 Dictée — Écrivez ce que vous entendez';
-    document.getElementById('sentenceDisplay').innerHTML = '<span style="color:var(--muted);font-style:italic">Chargement...</span>';
-  } else {
-    document.getElementById('exerciseLabel').textContent = '🔤 Traduction — Traduisez en anglais';
-    document.getElementById('sentenceDisplay').innerHTML = '<span style="color:var(--muted);font-style:italic">Génération en cours...</span>';
-  }
+  const useAI = !!state.geminiKey;
 
   try {
-    const prompt = effectiveMode === 'listen'
-      ? `Generate a single English sentence for a dictation exercise. Level: ${level.prompt}. 
-         Return ONLY a JSON object like: {"sentence":"..."} — no explanation, no markdown.`
-      : `Generate a French sentence and its English translation for a translation exercise. Level: ${level.prompt}.
-         Return ONLY a JSON object like: {"french":"...","english":"..."} — no explanation, no markdown.`;
-
-    const res = await callClaude(prompt, 200);
-
-    let data;
-    try {
-      data = JSON.parse(res.replace(/```json|```/g, '').trim());
-    } catch {
-      throw new Error('Réponse invalide de l\'API');
-    }
-
-    if (effectiveMode === 'listen') {
-      state.currentSentence = data.sentence;
-      state.currentTranslation = '';
-      // Show play button ready
-      document.getElementById('playBtn').classList.remove('playing');
-      // auto-play
-      setTimeout(() => speakText(state.currentSentence), 300);
+    if (useAI) {
+      await generateWithGemini(em);
+      document.getElementById('sourceBadge').className = 'source-badge ai';
+      document.getElementById('sourceBadge').textContent = '✦ Gemini IA';
     } else {
-      state.currentSentence = data.english;
-      state.currentTranslation = data.french;
-      document.getElementById('sentenceDisplay').textContent = data.french;
+      generateFromBank(em);
+      document.getElementById('sourceBadge').className = 'source-badge';
+      document.getElementById('sourceBadge').textContent = '📚 local';
     }
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Valider';
-    document.getElementById('answerInput').focus();
-
   } catch (err) {
-    document.getElementById('sentenceDisplay').innerHTML =
-      `<span style="color:var(--danger);font-size:14px">Erreur: ${err.message}</span>`;
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Réessayer';
+    // Fallback to local on AI error
+    console.warn('Gemini failed, falling back to local:', err.message);
+    generateFromBank(em);
+    document.getElementById('sourceBadge').className = 'source-badge';
+    document.getElementById('sourceBadge').textContent = '📚 local (fallback)';
   }
 
+  if (em === 'listen') {
+    document.getElementById('playBtn').classList.remove('playing');
+    setTimeout(() => speakText(state.currentSentence), 350);
+  } else {
+    document.getElementById('sentenceDisplay').textContent = state.currentFrench;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Valider';
+  document.getElementById('answerInput').focus();
   state.loading = false;
 }
 
-// ─── AUDIO ───────────────────────────────────────────────────────────────────
-function playAudio() {
-  if (state.currentSentence) speakText(state.currentSentence);
+function generateFromBank(mode) {
+  const levelKey = LEVELS[state.level].key;
+  const pool = BANK[levelKey] || BANK[1];
+  // Avoid repeating recent sentences
+  const available = pool.filter((_, i) => !state.usedLocal.has(`${levelKey}-${i}`));
+  const list = available.length > 0 ? available : pool;
+  const idx = Math.floor(Math.random() * list.length);
+  const item = list[idx];
+  // Track used (reset when all used)
+  const realIdx = pool.indexOf(item);
+  state.usedLocal.add(`${levelKey}-${realIdx}`);
+  if (state.usedLocal.size > pool.length * 0.8) state.usedLocal.clear();
+
+  state.currentSentence = item.en;
+  state.currentFrench = item.fr;
 }
+
+async function generateWithGemini(mode) {
+  const levelDesc = ["very simple A1 (5-8 words)","simple A2 (8-12 words)","intermediate B1 (12-18 words)","upper-intermediate B2 (18-25 words)","advanced C1 (20-30 words)","mastery C2 (25-35 words)"][state.level];
+
+  const prompt = mode === 'listen'
+    ? `Generate one English sentence for a dictation exercise at level ${levelDesc}. Return ONLY valid JSON: {"en":"..."}`
+    : `Generate a French sentence and its English translation at level ${levelDesc}. Return ONLY valid JSON: {"fr":"...","en":"..."}`;
+
+  const res = await callGemini(prompt, 200);
+  const data = JSON.parse(res.replace(/```json|```/g,'').trim());
+  state.currentSentence = data.en;
+  state.currentFrench = data.fr || '';
+}
+
+// ══════════════════════════════════════════════════════════
+// AUDIO
+// ══════════════════════════════════════════════════════════
+function playAudio() { if (state.currentSentence) speakText(state.currentSentence); }
 
 function speakText(text) {
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'en-US';
-  utt.rate = state.level <= 1 ? 0.8 : state.level <= 3 ? 0.9 : 1.0;
-  utt.pitch = 1;
-
-  // Pick a good English voice if available
+  utt.lang = 'en-GB';
+  utt.rate = [0.75, 0.82, 0.9, 0.95, 1.0, 1.0][state.level];
   const voices = window.speechSynthesis.getVoices();
-  const enVoice = voices.find(v => v.lang.startsWith('en') && !v.lang.includes('IN'));
-  if (enVoice) utt.voice = enVoice;
-
+  const preferred = voices.find(v => v.lang === 'en-GB' && v.name.includes('Google'))
+    || voices.find(v => v.lang.startsWith('en-GB'))
+    || voices.find(v => v.lang.startsWith('en'));
+  if (preferred) utt.voice = preferred;
   const btn = document.getElementById('playBtn');
   btn.classList.add('playing');
-  utt.onend = () => btn.classList.remove('playing');
+  utt.onend = utt.onerror = () => btn.classList.remove('playing');
   window.speechSynthesis.speak(utt);
 }
 
-// Ensure voices are loaded
-window.speechSynthesis.onvoiceschanged = () => {};
-
-// ─── SUBMIT ───────────────────────────────────────────────────────────────────
-function handleKey(e) {
-  if (e.key === 'Enter' && e.ctrlKey) submitAnswer();
-}
+// ══════════════════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════════════════
+function handleKey(e) { if (e.key === 'Enter' && e.ctrlKey) submitAnswer(); }
 
 async function submitAnswer() {
   if (state.submitted || state.loading) return;
@@ -774,78 +571,43 @@ async function submitAnswer() {
 
   state.submitted = true;
   state.session++;
-
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span class="spinner"></span>Correction...';
   document.getElementById('answerInput').disabled = true;
 
-  try {
-    const correctAnswer = state.currentSentence;
-    const isTranslate = state.currentMode === 'translate';
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Correction…';
 
-    const evalPrompt = isTranslate
-      ? `You are an English teacher. The student had to translate this French sentence into English:
-         French: "${state.currentTranslation}"
-         Correct English: "${correctAnswer}"
-         Student answer: "${answer}"
-         
-         Evaluate the answer. Be lenient on punctuation and capitalization. Focus on meaning and grammar.
-         Return ONLY JSON: {"correct": true/false, "score": 0-100, "feedback": "brief explanation in French (2-3 sentences max)", "correction": "corrected English sentence if needed"}`
-      : `You are an English teacher. The student had to transcribe this English sentence from audio:
-         Correct sentence: "${correctAnswer}"
-         Student answer: "${answer}"
-         
-         Evaluate the transcription. Be lenient on punctuation and capitalization. Focus on words.
-         Return ONLY JSON: {"correct": true/false, "score": 0-100, "feedback": "brief explanation in French (2-3 sentences max)", "correction": "the correct sentence"}`;
+  const score = similarity(state.currentSentence, answer);
+  const isCorrect = score >= 68;
 
-    const res = await callClaude(evalPrompt, 400);
-    let eval_;
-    try {
-      eval_ = JSON.parse(res.replace(/```json|```/g, '').trim());
-    } catch {
-      throw new Error('Erreur de correction');
-    }
+  // Show feedback locally (fast)
+  showFeedback(isCorrect, score, answer);
+  updateScore(isCorrect);
 
-    showFeedback(eval_);
-    updateScore(eval_);
-
-  } catch (err) {
-    document.getElementById('feedback').className = 'feedback visible incorrect';
-    document.getElementById('feedbackHeader').textContent = 'Erreur';
-    document.getElementById('feedbackBody').textContent = err.message;
-    document.getElementById('feedback').style.display = 'block';
-  }
-
-  submitBtn.textContent = 'Valider';
+  btn.textContent = 'Valider';
   document.getElementById('nextContainer').classList.add('visible');
 }
 
-function showFeedback(eval_) {
+function showFeedback(isCorrect, score, answer) {
   const fb = document.getElementById('feedback');
-  const isCorrect = eval_.score >= 70;
-
+  fb.className = `feedback visible ${isCorrect ? 'correct' : 'incorrect'}`;
   document.getElementById('answerInput').classList.add(isCorrect ? 'correct' : 'incorrect');
 
-  fb.className = `feedback visible ${isCorrect ? 'correct' : 'incorrect'}`;
   document.getElementById('feedbackHeader').textContent = isCorrect
-    ? `✓ Correct ! (${eval_.score}/100)`
-    : `✗ À corriger (${eval_.score}/100)`;
+    ? `✓ Correct ! (${score}/100)`
+    : `✗ À revoir (${score}/100)`;
 
-  document.getElementById('feedbackBody').innerHTML =
-    `<div style="margin-bottom:8px;color:var(--muted)">${eval_.feedback}</div>` +
-    (eval_.correction ? `<div><strong>Réponse correcte :</strong> ${eval_.correction}</div>` : '');
+  const corrected = wordDiff(state.currentSentence, answer);
+  document.getElementById('feedbackBody').innerHTML = isCorrect
+    ? `<span style="color:var(--muted)">Bonne réponse !</span>`
+    : `<div style="color:var(--muted);margin-bottom:6px">Les mots manquants ou incorrects sont <strong style="color:var(--accent)">surlignés</strong> :</div><div>${corrected}</div>`;
 }
 
-function updateScore(eval_) {
-  const isCorrect = eval_.score >= 70;
-  const pts = Math.round(eval_.score / 10);
-
+function updateScore(isCorrect) {
   if (isCorrect) {
-    state.score += pts;
+    state.score += 10 + state.level * 5;
     state.streak++;
-    // Level up
-    if (state.streak >= 3 && state.level < LEVELS.length - 1) {
+    if (state.streak >= 3 && state.level < 5) {
       state.level++;
       document.getElementById('diffPill').innerHTML =
         `<div class="diff-change up">↑ Niveau augmenté → ${LEVELS[state.level].label}</div>`;
@@ -855,7 +617,6 @@ function updateScore(eval_) {
     }
   } else {
     state.streak = 0;
-    // Level down
     if (state.level > 0) {
       state.level--;
       document.getElementById('diffPill').innerHTML =
@@ -864,56 +625,46 @@ function updateScore(eval_) {
       document.getElementById('diffPill').innerHTML = '';
     }
   }
-
   localStorage.setItem('et_level', state.level);
   localStorage.setItem('et_score', state.score);
   updateUI();
 }
 
 function hideFeedback() {
-  const fb = document.getElementById('feedback');
-  fb.className = 'feedback';
-  fb.style.display = '';
+  document.getElementById('feedback').className = 'feedback';
 }
 
 function updateUI() {
-  const level = LEVELS[state.level];
-  document.getElementById('levelLabel').textContent = level.label;
-  document.getElementById('levelFill').style.width = level.fill + '%';
+  const lv = LEVELS[state.level];
+  document.getElementById('levelLabel').textContent = lv.label;
+  document.getElementById('levelFill').style.width = lv.fill + '%';
   document.getElementById('scoreDisplay').textContent = state.score;
   document.getElementById('streakDisplay').textContent = state.streak + '🔥';
   document.getElementById('sessionDisplay').textContent = state.session;
 }
 
-function skipExercise() {
-  state.streak = 0;
-  generateExercise();
-}
+function skipExercise() { state.streak = 0; generateExercise(); }
+function nextExercise() { generateExercise(); }
 
-function nextExercise() {
-  generateExercise();
-}
-
-// ─── API ──────────────────────────────────────────────────────────────────────
-async function callClaude(prompt, maxTokens = 500) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+// ══════════════════════════════════════════════════════════
+// GEMINI API
+// ══════════════════════════════════════════════════════════
+async function callGemini(prompt, maxTokens = 400) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${state.geminiKey}`;
+  const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': state.apiKey, 'anthropic-version': '2023-06-01' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }]
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: maxTokens, temperature: 0.9 }
     })
   });
-
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    if (res.status === 401) throw new Error('Clé API invalide. Vérifiez votre clé Anthropic.');
-    throw new Error(err.error?.message || `Erreur API (${res.status})`);
+    throw new Error(err.error?.message || `Erreur Gemini (${res.status})`);
   }
-
   const data = await res.json();
-  return data.content?.find(b => b.type === 'text')?.text || '';
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 </script>
 </body>
