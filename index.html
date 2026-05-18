@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --surface: #161618;
+    --surface2: #1e1e21;
+    --border: #2a2a2f;
+    --accent: #c8f06e;
+    --accent2: #6ef0c8;
+    --danger: #f06e6e;
+    --text: #e8e8ea;
+    --muted: #6b6b78;
+    --radius: 12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 60px;
+    overflow-x: hidden;
+  }
+
+  /* Background grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    width: 100%;
+    max-width: 720px;
+    padding: 36px 0 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--muted); font-style: italic; font-size: 22px; }
+
+  /* STATS BAR */
+  .stats {
+    margin-left: auto;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stat-val {
+    font-size: 16px;
+    color: var(--text);
+    display: block;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* LEVEL BAR */
+  .level-container {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .level-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .level-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .level-track {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .level-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* MAIN CARD */
+  .card {
+    width: 100%;
+    max-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(200,240,110,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* EXERCISE TYPE TABS */
+  .type-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { border-color: var(--accent); color: var(--text); }
+  .tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0e0e0f;
+    font-weight: 500;
+  }
+
+  /* EXERCISE LABEL */
+  .exercise-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .exercise-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* SENTENCE DISPLAY */
+  .sentence-display {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    line-height: 1.45;
+    color: var(--text);
+    margin-bottom: 28px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sentence-display.loading {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 18px;
+  }
+
+  /* AUDIO BUTTON (exercise 1) */
+  .audio-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .play-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, opacity 0.15s;
+    flex-shrink: 0;
+  }
+
+  .play-btn:hover { transform: scale(1.08); }
+  .play-btn:active { transform: scale(0.95); }
+  .play-btn.playing { background: var(--accent2); }
+
+  .play-btn svg { fill: #0e0e0f; }
+
+  .audio-hint {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* INPUT */
+  .answer-area {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .answer-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .answer-input:focus { border-color: var(--accent); }
+  .answer-input.correct { border-color: var(--accent); background: rgba(200,240,110,0.04); }
+  .answer-input.incorrect { border-color: var(--danger); background: rgba(240,110,110,0.04); }
+
+  /* SUBMIT */
+  .actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #0e0e0f;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-ghost {
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.7;
+    display: none;
+    animation: slideUp 0.3s ease;
+  }
+
+  .feedback.visible { display: block; }
+  .feedback.correct { border-color: rgba(200,240,110,0.3); background: rgba(200,240,110,0.05); }
+  .feedback.incorrect { border-color: rgba(240,110,110,0.3); background: rgba(240,110,110,0.05); }
+
+  .feedback-header {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .feedback.correct .feedback-header { color: var(--accent); }
+  .feedback.incorrect .feedback-header { color: var(--danger); }
+
+  .correction { color: var(--text); }
+  .correction strong { color: var(--accent); }
+
+  /* DIFFICULTY CHANGE PILL */
+  .diff-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+
+  .diff-change.up { background: rgba(200,240,110,0.12); color: var(--accent); }
+  .diff-change.down { background: rgba(240,110,110,0.12); color: var(--danger); }
+
+  /* API KEY SETUP */
+  .setup-panel {
+    width: 100%;
+    max-width: 720px;
+    z-index: 1;
+    position: relative;
+    margin-top: 20px;
+  }
+
+  .setup-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 40px;
+  }
+
+  .setup-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .setup-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .setup-desc a { color: var(--accent); text-decoration: none; }
+  .setup-desc a:hover { text-decoration: underline; }
+
+  .key-input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .key-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .key-input:focus { border-color: var(--accent); }
+
+  .key-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* SPINNER */
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(14,14,15,0.3);
+    border-top-color: #0e0e0f;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NEXT BUTTON CONTAINER */
+  .next-container {
+    margin-top: 20px;
+    display: none;
+  }
+  .next-container.visible { display: flex; }
+
+  /* STREAK BADGE */
+  .streak {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  /* hidden */
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    .card { padding: 24px 20px; }
+    .setup-card { padding: 24px 20px; }
+    header { flex-wrap: wrap; }
+    .sentence-display { font-size: 20px; }
+    .stats { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">English<span>trainer</span></div>
+  <div class="stats">
+    <div>
+      <span class="stat-val" id="scoreDisplay">0</span>
+      score
+    </div>
+    <div>
+      <span class="stat-val" id="streakDisplay">0🔥</span>
+      streak
+    </div>
+    <div>
+      <span class="stat-val" id="sessionDisplay">0</span>
+      exercices
+    </div>
+  </div>
+</header>
+
+<!-- SETUP PANEL -->
+<div class="setup-panel" id="setupPanel">
+  <div class="setup-card">
+    <div class="setup-title">Configurer l'application</div>
+    <div class="setup-desc">
+      Cette application utilise l'API Claude pour générer des exercices personnalisés.<br>
+      Entrez votre clé API Anthropic (elle restera <strong>uniquement dans votre navigateur</strong>).<br>
+      Obtenez une clé sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+    </div>
+    <div class="key-input-row">
+      <input type="password" class="key-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
+      <button class="btn-primary" onclick="saveApiKey()">Démarrer</button>
+    </div>
+    <div class="key-note">🔒 La clé est stockée dans localStorage — elle ne quitte jamais votre appareil.</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" class="hidden" style="width:100%;max-width:720px;position:relative;z-index:1;">
+
+  <!-- Level bar -->
+  <div class="level-container">
+    <div class="level-info">
+      <span>Niveau de difficulté</span>
+      <span class="level-badge" id="levelLabel">A2 — Élémentaire</span>
+    </div>
+    <div class="level-track">
+      <div class="level-fill" id="levelFill" style="width: 20%"></div>
+    </div>
+  </div>
+
+  <!-- Main card -->
+  <div class="card">
+    <div class="type-tabs">
+      <button class="tab active" id="tab1" onclick="switchMode('listen')">🎧 Dictée</button>
+      <button class="tab" id="tab2" onclick="switchMode('translate')">🔤 Traduction</button>
+      <button class="tab" id="tab3" onclick="switchMode('random')">🎲 Aléatoire</button>
+    </div>
+
+    <!-- EXERCISE AREA -->
+    <div id="exerciseArea">
+      <div class="exercise-label" id="exerciseLabel">Dictée anglaise</div>
+
+      <!-- Listen mode content -->
+      <div id="listenContent">
+        <div class="audio-section">
+          <button class="play-btn" id="playBtn" onclick="playAudio()" title="Écouter la phrase">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="audio-hint">
+            Écoutez la phrase en anglais et écrivez ce que vous entendez.<br>
+            <span style="color:var(--muted);font-size:11px">Cliquez plusieurs fois pour réécouter.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Translate mode content -->
+      <div id="translateContent" class="hidden">
+        <div class="sentence-display" id="sentenceDisplay">
+          <span style="color:var(--muted);font-style:italic">Génération en cours...</span>
+        </div>
+      </div>
+
+      <div class="answer-area">
+        <textarea class="answer-input" id="answerInput"
+          placeholder="Votre réponse ici..."
+          rows="3"
+          onkeydown="handleKey(event)"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">
+          Valider
+        </button>
+        <button class="btn-ghost" onclick="skipExercise()">Passer</button>
+        <div class="streak hidden" id="streakBadge"></div>
+      </div>
+
+      <div class="feedback" id="feedback">
+        <div class="feedback-header" id="feedbackHeader"></div>
+        <div class="correction" id="feedbackBody"></div>
+        <div id="diffPill"></div>
+      </div>
+
+      <div class="next-container" id="nextContainer">
+        <button class="btn-primary" onclick="nextExercise()">Exercice suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;text-align:right;z-index:1;position:relative;">
+    <button class="btn-ghost" onclick="resetApiKey()" style="font-size:11px;padding:8px 14px;">
+      ⚙ Changer la clé API
+    </button>
+  </div>
+</div>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────────────────────
+const LEVELS = [
+  { label: "A1 — Débutant",    fill: 5,   prompt: "very simple A1 English, short sentences (5-8 words), basic vocabulary" },
+  { label: "A2 — Élémentaire", fill: 20,  prompt: "simple A2 English, everyday sentences (8-12 words), common vocabulary" },
+  { label: "B1 — Intermédiaire",fill: 40, prompt: "intermediate B1 English, medium sentences (12-18 words), varied vocabulary" },
+  { label: "B2 — Avancé",      fill: 60,  prompt: "upper-intermediate B2 English, complex sentences (18-25 words), rich vocabulary" },
+  { label: "C1 — Expert",      fill: 80,  prompt: "advanced C1 English, sophisticated sentences (20-30 words), idiomatic language" },
+  { label: "C2 — Maîtrise",    fill: 100, prompt: "mastery C2 English, complex structures (25-35 words), nuanced and formal language" },
+];
+
+let state = {
+  apiKey: localStorage.getItem('et_apikey') || '',
+  level: parseInt(localStorage.getItem('et_level') || '1'),
+  score: parseInt(localStorage.getItem('et_score') || '0'),
+  streak: 0,
+  session: 0,
+  mode: 'listen', // listen | translate | random
+  currentSentence: '',
+  currentTranslation: '',
+  submitted: false,
+  loading: false,
+};
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+window.onload = () => {
+  if (state.apiKey) {
+    showApp();
+  }
+};
+
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key.startsWith('sk-')) {
+    alert('Clé API invalide. Elle doit commencer par "sk-"');
+    return;
+  }
+  state.apiKey = key;
+  localStorage.setItem('et_apikey', key);
+  showApp();
+}
+
+function resetApiKey() {
+  localStorage.removeItem('et_apikey');
+  state.apiKey = '';
+  document.getElementById('mainApp').classList.add('hidden');
+  document.getElementById('setupPanel').classList.remove('hidden');
+  document.getElementById('apiKeyInput').value = '';
+}
+
+function showApp() {
+  document.getElementById('setupPanel').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+  updateUI();
+  generateExercise();
+}
+
+// ─── MODE ────────────────────────────────────────────────────────────────────
+function switchMode(mode) {
+  state.mode = mode;
+  document.getElementById('tab1').classList.toggle('active', mode === 'listen');
+  document.getElementById('tab2').classList.toggle('active', mode === 'translate');
+  document.getElementById('tab3').classList.toggle('active', mode === 'random');
+  generateExercise();
+}
+
+function getEffectiveMode() {
+  if (state.mode === 'random') return Math.random() < 0.5 ? 'listen' : 'translate';
+  return state.mode;
+}
+
+// ─── GENERATE ────────────────────────────────────────────────────────────────
+async function generateExercise() {
+  if (state.loading) return;
+  state.loading = true;
+  state.submitted = false;
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span>Génération...';
+
+  hideFeedback();
+  document.getElementById('nextContainer').classList.remove('visible');
+  document.getElementById('answerInput').value = '';
+  document.getElementById('answerInput').className = 'answer-input';
+  document.getElementById('answerInput').disabled = false;
+
+  const effectiveMode = getEffectiveMode();
+  state.currentMode = effectiveMode;
+
+  const level = LEVELS[state.level];
+
+  // Show/hide sections
+  document.getElementById('listenContent').classList.toggle('hidden', effectiveMode !== 'listen');
+  document.getElementById('translateContent').classList.toggle('hidden', effectiveMode !== 'translate');
+
+  if (effectiveMode === 'listen') {
+    document.getElementById('exerciseLabel').textContent = '🎧 Dictée — Écrivez ce que vous entendez';
+    document.getElementById('sentenceDisplay').innerHTML = '<span style="color:var(--muted);font-style:italic">Chargement...</span>';
+  } else {
+    document.getElementById('exerciseLabel').textContent = '🔤 Traduction — Traduisez en anglais';
+    document.getElementById('sentenceDisplay').innerHTML = '<span style="color:var(--muted);font-style:italic">Génération en cours...</span>';
+  }
+
+  try {
+    const prompt = effectiveMode === 'listen'
+      ? `Generate a single English sentence for a dictation exercise. Level: ${level.prompt}. 
+         Return ONLY a JSON object like: {"sentence":"..."} — no explanation, no markdown.`
+      : `Generate a French sentence and its English translation for a translation exercise. Level: ${level.prompt}.
+         Return ONLY a JSON object like: {"french":"...","english":"..."} — no explanation, no markdown.`;
+
+    const res = await callClaude(prompt, 200);
+
+    let data;
+    try {
+      data = JSON.parse(res.replace(/```json|```/g, '').trim());
+    } catch {
+      throw new Error('Réponse invalide de l\'API');
+    }
+
+    if (effectiveMode === 'listen') {
+      state.currentSentence = data.sentence;
+      state.currentTranslation = '';
+      // Show play button ready
+      document.getElementById('playBtn').classList.remove('playing');
+      // auto-play
+      setTimeout(() => speakText(state.currentSentence), 300);
+    } else {
+      state.currentSentence = data.english;
+      state.currentTranslation = data.french;
+      document.getElementById('sentenceDisplay').textContent = data.french;
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Valider';
+    document.getElementById('answerInput').focus();
+
+  } catch (err) {
+    document.getElementById('sentenceDisplay').innerHTML =
+      `<span style="color:var(--danger);font-size:14px">Erreur: ${err.message}</span>`;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Réessayer';
+  }
+
+  state.loading = false;
+}
+
+// ─── AUDIO ───────────────────────────────────────────────────────────────────
+function playAudio() {
+  if (state.currentSentence) speakText(state.currentSentence);
+}
+
+function speakText(text) {
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US';
+  utt.rate = state.level <= 1 ? 0.8 : state.level <= 3 ? 0.9 : 1.0;
+  utt.pitch = 1;
+
+  // Pick a good English voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const enVoice = voices.find(v => v.lang.startsWith('en') && !v.lang.includes('IN'));
+  if (enVoice) utt.voice = enVoice;
+
+  const btn = document.getElementById('playBtn');
+  btn.classList.add('playing');
+  utt.onend = () => btn.classList.remove('playing');
+  window.speechSynthesis.speak(utt);
+}
+
+// Ensure voices are loaded
+window.speechSynthesis.onvoiceschanged = () => {};
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────────────
+function handleKey(e) {
+  if (e.key === 'Enter' && e.ctrlKey) submitAnswer();
+}
+
+async function submitAnswer() {
+  if (state.submitted || state.loading) return;
+  const answer = document.getElementById('answerInput').value.trim();
+  if (!answer) { document.getElementById('answerInput').focus(); return; }
+
+  state.submitted = true;
+  state.session++;
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span>Correction...';
+  document.getElementById('answerInput').disabled = true;
+
+  try {
+    const correctAnswer = state.currentSentence;
+    const isTranslate = state.currentMode === 'translate';
+
+    const evalPrompt = isTranslate
+      ? `You are an English teacher. The student had to translate this French sentence into English:
+         French: "${state.currentTranslation}"
+         Correct English: "${correctAnswer}"
+         Student answer: "${answer}"
+         
+         Evaluate the answer. Be lenient on punctuation and capitalization. Focus on meaning and grammar.
+         Return ONLY JSON: {"correct": true/false, "score": 0-100, "feedback": "brief explanation in French (2-3 sentences max)", "correction": "corrected English sentence if needed"}`
+      : `You are an English teacher. The student had to transcribe this English sentence from audio:
+         Correct sentence: "${correctAnswer}"
+         Student answer: "${answer}"
+         
+         Evaluate the transcription. Be lenient on punctuation and capitalization. Focus on words.
+         Return ONLY JSON: {"correct": true/false, "score": 0-100, "feedback": "brief explanation in French (2-3 sentences max)", "correction": "the correct sentence"}`;
+
+    const res = await callClaude(evalPrompt, 400);
+    let eval_;
+    try {
+      eval_ = JSON.parse(res.replace(/```json|```/g, '').trim());
+    } catch {
+      throw new Error('Erreur de correction');
+    }
+
+    showFeedback(eval_);
+    updateScore(eval_);
+
+  } catch (err) {
+    document.getElementById('feedback').className = 'feedback visible incorrect';
+    document.getElementById('feedbackHeader').textContent = 'Erreur';
+    document.getElementById('feedbackBody').textContent = err.message;
+    document.getElementById('feedback').style.display = 'block';
+  }
+
+  submitBtn.textContent = 'Valider';
+  document.getElementById('nextContainer').classList.add('visible');
+}
+
+function showFeedback(eval_) {
+  const fb = document.getElementById('feedback');
+  const isCorrect = eval_.score >= 70;
+
+  document.getElementById('answerInput').classList.add(isCorrect ? 'correct' : 'incorrect');
+
+  fb.className = `feedback visible ${isCorrect ? 'correct' : 'incorrect'}`;
+  document.getElementById('feedbackHeader').textContent = isCorrect
+    ? `✓ Correct ! (${eval_.score}/100)`
+    : `✗ À corriger (${eval_.score}/100)`;
+
+  document.getElementById('feedbackBody').innerHTML =
+    `<div style="margin-bottom:8px;color:var(--muted)">${eval_.feedback}</div>` +
+    (eval_.correction ? `<div><strong>Réponse correcte :</strong> ${eval_.correction}</div>` : '');
+}
+
+function updateScore(eval_) {
+  const isCorrect = eval_.score >= 70;
+  const pts = Math.round(eval_.score / 10);
+
+  if (isCorrect) {
+    state.score += pts;
+    state.streak++;
+    // Level up
+    if (state.streak >= 3 && state.level < LEVELS.length - 1) {
+      state.level++;
+      document.getElementById('diffPill').innerHTML =
+        `<div class="diff-change up">↑ Niveau augmenté → ${LEVELS[state.level].label}</div>`;
+      state.streak = 0;
+    } else {
+      document.getElementById('diffPill').innerHTML = '';
+    }
+  } else {
+    state.streak = 0;
+    // Level down
+    if (state.level > 0) {
+      state.level--;
+      document.getElementById('diffPill').innerHTML =
+        `<div class="diff-change down">↓ Niveau réduit → ${LEVELS[state.level].label}</div>`;
+    } else {
+      document.getElementById('diffPill').innerHTML = '';
+    }
+  }
+
+  localStorage.setItem('et_level', state.level);
+  localStorage.setItem('et_score', state.score);
+  updateUI();
+}
+
+function hideFeedback() {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.style.display = '';
+}
+
+function updateUI() {
+  const level = LEVELS[state.level];
+  document.getElementById('levelLabel').textContent = level.label;
+  document.getElementById('levelFill').style.width = level.fill + '%';
+  document.getElementById('scoreDisplay').textContent = state.score;
+  document.getElementById('streakDisplay').textContent = state.streak + '🔥';
+  document.getElementById('sessionDisplay').textContent = state.session;
+}
+
+function skipExercise() {
+  state.streak = 0;
+  generateExercise();
+}
+
+function nextExercise() {
+  generateExercise();
+}
+
+// ─── API ──────────────────────────────────────────────────────────────────────
+async function callClaude(prompt, maxTokens = 500) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': state.apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 401) throw new Error('Clé API invalide. Vérifiez votre clé Anthropic.');
+    throw new Error(err.error?.message || `Erreur API (${res.status})`);
+  }
+
+  const data = await res.json();
+  return data.content?.find(b => b.type === 'text')?.text || '';
+}
+</script>
+</body>
+</html>
