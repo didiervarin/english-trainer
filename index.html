@@ -99,25 +99,6 @@
   .diff-change.down { background: rgba(240,110,110,0.1); color: var(--danger); }
   .next-container { margin-top: 18px; display: none; }
   .next-container.visible { display: flex; gap: 10px; flex-wrap: wrap; }
-  .source-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 9px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); margin-left: auto; }
-  .source-badge.ai { border-color: rgba(110,240,200,0.3); color: var(--accent2); }
-
-  /* SETTINGS PANEL */
-  .settings-bar { width: 100%; max-width: 720px; margin-top: 14px; position: relative; z-index: 1; }
-  .settings-toggle { background: none; border: none; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; letter-spacing: 0.05em; transition: color 0.2s; }
-  .settings-toggle:hover { color: var(--text); }
-  .settings-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-top: 10px; display: none; animation: slideUp 0.25s ease; }
-  .settings-panel.open { display: block; }
-  .settings-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
-  .gemini-row { display: flex; gap: 10px; align-items: center; }
-  .gemini-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; outline: none; transition: border-color 0.2s; }
-  .gemini-input:focus { border-color: var(--accent2); }
-  .gemini-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
-  .gemini-note a { color: var(--accent2); text-decoration: none; }
-  .gemini-note a:hover { text-decoration: underline; }
-  .gemini-status { font-size: 11px; margin-top: 8px; }
-  .gemini-status.ok { color: var(--accent); }
-  .gemini-status.off { color: var(--muted); }
   .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(14,14,15,0.3); border-top-color: #0e0e0f; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 5px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes slideUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -179,7 +160,6 @@
   <div class="actions">
     <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">Valider</button>
     <button class="btn-ghost" onclick="skipExercise()">Passer</button>
-    <span class="source-badge" id="sourceBadge">📚 local</span>
   </div>
 
   <div class="feedback" id="feedback">
@@ -193,22 +173,7 @@
   </div>
 </div>
 
-<div class="settings-bar">
-  <button class="settings-toggle" onclick="toggleSettings()">⚙ Paramètres Gemini <span id="settingsArrow">▸</span></button>
-  <div class="settings-panel" id="settingsPanel">
-    <div class="settings-title">API Gemini (gratuit)</div>
-    <div class="gemini-row">
-      <input type="password" class="gemini-input" id="geminiKeyInput" placeholder="Votre clé API Google Gemini…" autocomplete="off">
-      <button class="btn-primary" style="white-space:nowrap" onclick="saveGeminiKey()">Enregistrer</button>
-      <button class="btn-ghost" onclick="clearGeminiKey()">Retirer</button>
-    </div>
-    <div class="gemini-note">
-      Clé gratuite sur <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> (compte Google requis, 60 req/min).<br>
-      Sans clé : exercices depuis la banque locale (200+ phrases). La clé est stockée dans votre navigateur uniquement.
-    </div>
-    <div class="gemini-status off" id="geminiStatus">● Mode local activé</div>
-  </div>
-</div>
+
 
 <script>
 // ══════════════════════════════════════════════════════════
@@ -369,7 +334,6 @@ const LEVELS = [
 ];
 
 let state = {
-  geminiKey: localStorage.getItem('et_gemini') || '',
   level: Math.min(parseInt(localStorage.getItem('et_level') || '1'), 5),
   score: parseInt(localStorage.getItem('et_score') || '0'),
   streak: 0,
@@ -387,52 +351,12 @@ let state = {
 // INIT
 // ══════════════════════════════════════════════════════════
 window.addEventListener('load', () => {
-  if (state.geminiKey) {
-    document.getElementById('geminiKeyInput').value = state.geminiKey;
-    updateGeminiStatus(true);
-  }
   updateUI();
   generateExercise();
 });
 
 // Preload voices
 window.speechSynthesis.onvoiceschanged = () => {};
-
-// ══════════════════════════════════════════════════════════
-// SETTINGS
-// ══════════════════════════════════════════════════════════
-function toggleSettings() {
-  const panel = document.getElementById('settingsPanel');
-  const arrow = document.getElementById('settingsArrow');
-  const open = panel.classList.toggle('open');
-  arrow.textContent = open ? '▾' : '▸';
-}
-
-function saveGeminiKey() {
-  const key = document.getElementById('geminiKeyInput').value.trim();
-  if (!key) { clearGeminiKey(); return; }
-  state.geminiKey = key;
-  localStorage.setItem('et_gemini', key);
-  updateGeminiStatus(true);
-}
-
-function clearGeminiKey() {
-  state.geminiKey = '';
-  localStorage.removeItem('et_gemini');
-  document.getElementById('geminiKeyInput').value = '';
-  updateGeminiStatus(false);
-}
-
-function updateGeminiStatus(active) {
-  const el = document.getElementById('geminiStatus');
-  if (active) {
-    el.className = 'gemini-status ok';
-    el.textContent = '● Mode IA Gemini activé — exercices générés dynamiquement';
-  } else {
-    el.className = 'gemini-status off';
-    el.textContent = '● Mode local activé — 200+ phrases intégrées';
-  }
-}
 
 // ══════════════════════════════════════════════════════════
 // MODE
@@ -475,25 +399,7 @@ async function generateExercise() {
   document.getElementById('exerciseLabel').textContent =
     em === 'listen' ? '🎧 Écrivez la phrase que vous entendez' : '🔤 Traduisez en anglais';
 
-  const useAI = !!state.geminiKey;
-
-  try {
-    if (useAI) {
-      await generateWithGemini(em);
-      document.getElementById('sourceBadge').className = 'source-badge ai';
-      document.getElementById('sourceBadge').textContent = '✦ Gemini IA';
-    } else {
-      generateFromBank(em);
-      document.getElementById('sourceBadge').className = 'source-badge';
-      document.getElementById('sourceBadge').textContent = '📚 local';
-    }
-  } catch (err) {
-    // Fallback to local on AI error
-    console.warn('Gemini failed, falling back to local:', err.message);
-    generateFromBank(em);
-    document.getElementById('sourceBadge').className = 'source-badge';
-    document.getElementById('sourceBadge').textContent = '📚 local (fallback)';
-  }
+  generateFromBank(em);
 
   if (em === 'listen') {
     document.getElementById('playBtn').classList.remove('playing');
@@ -525,25 +431,13 @@ function generateFromBank(mode) {
   state.currentFrench = item.fr;
 }
 
-async function generateWithGemini(mode) {
-  const levelDesc = ["very simple A1 (5-8 words)","simple A2 (8-12 words)","intermediate B1 (12-18 words)","upper-intermediate B2 (18-25 words)","advanced C1 (20-30 words)","mastery C2 (25-35 words)"][state.level];
-
-  const prompt = mode === 'listen'
-    ? `Generate one English sentence for a dictation exercise at level ${levelDesc}. Return ONLY valid JSON: {"en":"..."}`
-    : `Generate a French sentence and its English translation at level ${levelDesc}. Return ONLY valid JSON: {"fr":"...","en":"..."}`;
-
-  const res = await callGemini(prompt, 200);
-  const data = JSON.parse(res.replace(/```json|```/g,'').trim());
-  state.currentSentence = data.en;
-  state.currentFrench = data.fr || '';
-}
-
 // ══════════════════════════════════════════════════════════
 // AUDIO
 // ══════════════════════════════════════════════════════════
 function playAudio() { if (state.currentSentence) speakText(state.currentSentence); }
 
 function speakText(text) {
+  const btn = document.getElementById('playBtn');
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'en-GB';
@@ -553,7 +447,6 @@ function speakText(text) {
     || voices.find(v => v.lang.startsWith('en-GB'))
     || voices.find(v => v.lang.startsWith('en'));
   if (preferred) utt.voice = preferred;
-  const btn = document.getElementById('playBtn');
   btn.classList.add('playing');
   utt.onend = utt.onerror = () => btn.classList.remove('playing');
   window.speechSynthesis.speak(utt);
@@ -646,26 +539,7 @@ function updateUI() {
 function skipExercise() { state.streak = 0; generateExercise(); }
 function nextExercise() { generateExercise(); }
 
-// ══════════════════════════════════════════════════════════
-// GEMINI API
-// ══════════════════════════════════════════════════════════
-async function callGemini(prompt, maxTokens = 400) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${state.geminiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: maxTokens, temperature: 0.9 }
-    })
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `Erreur Gemini (${res.status})`);
-  }
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
+
 </script>
 </body>
 </html>
